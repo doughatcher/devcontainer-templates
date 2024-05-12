@@ -1,0 +1,91 @@
+FROM mcr.microsoft.com/devcontainers/base:bullseye
+
+RUN curl -sS https://packages.sury.org/php/apt.gpg | apt-key add - \
+    && echo "deb https://packages.sury.org/php/ bullseye main" | tee /etc/apt/sources.list.d/php.list
+
+RUN apt-get update && apt-get install -y \
+    libzip-dev \
+    git \
+    unzip \
+    wget \
+    libfreetype6-dev \
+    libicu-dev \
+    libjpeg62-turbo-dev \
+    libpng-dev \
+    libxslt1-dev \
+    mariadb-client \
+    sendmail-bin \
+    sendmail \
+    sudo \
+    redis \
+    vim \
+    curl \
+    libzip-dev \
+    unzip \
+    wget \
+    libmagickwand-dev \
+    imagemagick \ 
+    libjpeg-dev \
+    \
+    php8.2-fpm \
+    php8.2-zip \
+    php8.2-simplexml \
+    php8.2-curl \
+    php8.2-intl \
+    php8.2-soap \
+    php8.2-bcmath \
+    php8.2-gd \
+    php8.2-mysql \
+    php8.2-mbstring \
+    \
+    libnss3-tools\
+    \
+    && apt clean
+
+# composer dependencies
+RUN curl https://getcomposer.org/download/latest-stable/composer.phar --output /usr/local/bin/composer
+RUN chmod +x /usr/local/bin/composer
+RUN composer --version
+
+# configure php
+# RUN  docker-php-ext-install -j$(nproc) gd \
+#         && docker-php-ext-install \
+#           dom \
+#           intl \
+#           gd \
+#           pdo_mysql \
+#           xsl \
+#           zip \
+#           soap \
+#           bcmath \
+#           calendar \
+#           sockets \
+#           posix \
+#           pcntl \
+#         && docker-php-ext-configure sockets \
+#         && docker-php-ext-configure gd --with-jpeg --with-freetype \
+#         && docker-php-ext-install gd
+
+# install imagick
+# RUN pecl install imagick
+
+#installs mkcert
+# RUN curl -JLO "https://dl.filippo.io/mkcert/latest?for=linux/amd64"
+# RUN chmod +x mkcert-v*-linux-amd64
+# RUN sudo cp mkcert-v*-linux-amd64 /usr/local/bin/mkcert
+
+
+# # configuration
+# RUN echo "extension=imagick.so" > /etc/php/8.2/fpm/conf.d/imagick.ini
+# RUN echo 'memory_limit = 2G' >> /etc/php/8.2/fpm/php.ini
+# RUN echo 'max_input_vars = 10000' >> /etc/php/8.2/fpm/php.ini
+# RUN echo 'memory_limit = -1' >> /etc/php/8.2/fpm/conf.d/memory_limit.ini
+
+# RUN echo 'memory_limit = 2G' >> /etc/php/8.2/cli/php.ini
+# RUN echo 'max_input_vars = 10000' >> /etc/php/8.2/cli/php.ini
+# RUN echo 'memory_limit = -1' >> /etc/php/8.2/cli/conf.d/memory_limit.ini
+
+# RUN mkdir -p /run/php
+
+# COPY conf/php-fpm/fpm-pool.conf /etc/php/8.2/fpm/pool.d/www.conf
+
