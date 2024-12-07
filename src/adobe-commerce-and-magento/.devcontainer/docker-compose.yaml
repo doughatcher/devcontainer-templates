@@ -13,6 +13,8 @@ services:
       XDEBUG_MODE: ${XDEBUG_MODE}
       PHP_VERSION: ${PHP_VERSION}
       COMPOSER_VERSION: ${COMPOSER_VERSION}
+      TEST_MODE: ${TEST_MODE}
+      ENABLE_IMS: ${ENABLE_IMS}
   db:
     image: mariadb:10.6
     volumes:

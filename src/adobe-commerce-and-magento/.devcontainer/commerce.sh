@@ -29,19 +29,20 @@ fi
 if [ "$SKIP_SETUP" != "true" ]
 then
 
+    if [ ! -f composer.json ]; then
+        echo "composer.json not found, running custom command"
+        composer create-project --repository-url=https://repo.magento.com/ $COMMERCE_EDITION ./tmp
+        cp -r ./tmp/* ./ && rm -rf ./tmp
+    fi
+
+    if [ -n "$COMPOSER_REQUIRES" ]; then
+        composer require $COMPOSER_REQUIRES
+    fi
+
+    composer install
+
     if [ ! -f app/etc/env.php ]
         then
-
-        if [ -z "$(ls -A)" ]; then
-            composer create-project --repository-url=https://repo.magento.com/ $COMMERCE_EDITION .
-
-            if [ -n "$COMPOSER_REQUIRES" ]; then
-                composer require $COMPOSER_REQUIRES
-            fi
-
-        else
-        composer install
-        fi
 
         INSTALL="true"
         bin/magento setup:install \
@@ -84,13 +85,15 @@ then
         bin/magento config:set --lock-env catalog/search/enable_eav_indexer 1
         bin/magento config:set --lock-env dev/static/sign 0
 
-        # bin/magento admin:adobe-ims:enable \
-        #                 --organization-id=$IMS_ORG_ID \
-        #                 --client-id=IMS_CLIENT_ID \
-        #                 --client-secret=$IMS_CLIENT_SECRET \
-        #                 --2fa=$IMS_2FA_ENABLED
-
-        bin/magento module:disable Magento_AdminAdobeImsTwoFactorAuth Magento_TwoFactorAuth
+        if [ "$ENABLE_IMS" == "true" ]; then
+            bin/magento admin:adobe-ims:enable \
+                --organization-id=$IMS_ORG_ID \
+                --client-id=$IMS_CLIENT_ID \
+                --client-secret=$IMS_CLIENT_SECRET \
+                --2fa=$IMS_2FA_ENABLED
+        else 
+            bin/magento module:disable Magento_AdminAdobeImsTwoFactorAuth Magento_TwoFactorAuth
+        fi
 
         bin/magento cache:enable block_html full_page
 
@@ -118,6 +121,11 @@ then
 fi
 
 # run the server
+
+if [ "$TEST_MODE" == "true" ]; then
+    echo "devcontainer built successfully and started commerce.sh and ran installation. Skipping server start."
+    exit 0
+fi
 
 if [ -n "$SERVER_CMD" ]; then
     eval "$SERVER_CMD" &
