@@ -2,13 +2,29 @@
 
 set -e
 
-: ${PORT:=8443}
-: ${BASEURL:="https://localhost:$PORT/"}
 : ${DEPLOY_MODE:="developer"}
 : ${INSTALL_SAMPLE_DATA:="false"}
-: ${COMMERCE_EDITION:="magento/community-edition"} # magento/community-edition
+: ${COMMERCE_EDITION:="magento/project-enterprise-edition"}
 : ${SKIP_SETUP:="false"}
 
+if [ "$PHP_MODE" == "builtin" ]; then
+    : ${PORT:=8080}
+    : ${USE_SECURE_URL:="0"}
+    : ${PROTOCOL:="http"}
+else
+    : ${USE_SECURE_URL:="1"}
+    : ${PORT:=8443}
+    : ${PROTOCOL:="https"}
+fi
+
+: ${BASEURL:="$PROTOCOL://localhost:$PORT/"}
+
+if [ -n "$CODESPACE_NAME" ]; then
+    PORT=80
+    BASEURL="https://$CODESPACE_NAME-$PORT.app.github.dev/"
+    USE_SECURE_URL="0"
+    echo "Setting base URL to $BASEURL"
+fi
 
 if [ "$SKIP_SETUP" != "true" ]
 then
@@ -17,7 +33,7 @@ then
         then
 
         if [ -z "$(ls -A)" ]; then
-            composer create-project --repository-url=https://repo.magento.com/ $COMMERCE_EDITION ./new
+            composer create-project --repository-url=https://repo.magento.com/ $COMMERCE_EDITION .
 
             if [ -n "$COMPOSER_REQUIRES" ]; then
                 composer require $COMPOSER_REQUIRES
@@ -60,8 +76,8 @@ then
             --page-cache-redis-db=1 \
             --page-cache-redis-port=6379
 
-        bin/magento config:set --lock-env web/secure/use_in_frontend 1
-        bin/magento config:set --lock-env web/secure/use_in_adminhtml 1
+        bin/magento config:set --lock-env web/secure/use_in_frontend $USE_SECURE_URL
+        bin/magento config:set --lock-env web/secure/use_in_adminhtml $USE_SECURE_URL
         bin/magento config:set --lock-env web/seo/use_rewrites 1
         bin/magento config:set --lock-env system/full_page_cache/caching_application 1
         bin/magento config:set --lock-env system/full_page_cache/ttl 604800
@@ -87,6 +103,10 @@ then
         bin/magento config:set --lock-env web/unsecure/base_url "$BASEURL"
         bin/magento config:set --lock-env web/secure/base_url "$BASEURL"
 
+        if [ -n "$CODESPACE_NAME" ]; then
+            bin/magento config:set --lock-env web/url/redirect_to_base 0
+        fi
+
         bin/magento deploy:mode:set $DEPLOY_MODE
         bin/magento indexer:reindex
     else
@@ -95,5 +115,19 @@ then
 
     bin/magento cache:flush
 
+fi
+
+# run the server
+
+if [ -n "$SERVER_CMD" ]; then
+    eval "$SERVER_CMD" &
+fi
+
+if [ "$PHP_MODE" == "fpm" ]; then
+    echo "Running in FPM mode"
+    php-fpm --allow-to-run-as-root --nodaemonize
+elif [ "$PHP_MODE" == "builtin" ]; then
+    echo "Running in built-in server mode"
+    php -S 127.0.0.1:$PORT -t ./pub/ ./phpserver/router.php
 fi
 

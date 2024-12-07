@@ -27,7 +27,7 @@
     "PHP_MODE": "builtin", // fpm, builtin
     "POST_INSTALL_CMD": "",
     "SKIP_SETUP": "false",
-    "SERVER_CMD": "app/code/Evergreen/Healthcare/bin/watcher.sh",
+    "SERVER_CMD": ""
   },
 
   "hostRequirements": {
