@@ -1,5 +1,7 @@
 #!/bin/bash
 
+echo "Starting commerce.sh"
+
 set -e
 
 : ${DEPLOY_MODE:="developer"}
