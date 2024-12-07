@@ -6,7 +6,7 @@ help: ## Show this help message
 build: build-commerce ## Build all devcontainers
 
 build-commerce: ## Build the adobe commerce devcontainer
-	devcontainer up --workspace-folder src/adobe-commerce-and-magento
+	devcontainer up --workspace-folder src/adobe-commerce-and-magento --remove-existing-container --build-no-cache
 
 generate-docs: ## generate docs for each devcontainer
 	devcontainer templates generate-docs -p src/
