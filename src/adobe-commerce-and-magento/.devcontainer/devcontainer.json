@@ -17,8 +17,8 @@
   ],
 
   "containerEnv": {
-    "PHP_VERSION": "${templateOption:phpVersion}",
-    "COMPOSER_VERSION": "${templateOption:composerVersion}",
+    "PHP_VERSION": "$${templateOption:phpVersion}",
+    "COMPOSER_VERSION": "$${templateOption:composerVersion}",
     "XDEBUG_MODE": "off", // debug, profile, trace
     "PHP_MODE": "builtin", // fpm, builtin
     "POST_INSTALL_CMD": "",

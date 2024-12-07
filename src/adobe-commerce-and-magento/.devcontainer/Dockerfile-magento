@@ -1,4 +1,8 @@
 FROM mcr.microsoft.com/devcontainers/base:bullseye
+
+ARG PHP_VERSION=8.3
+ARG COMPOSER_VERSION=2.7.0
+
 # Install php-fpm
 RUN curl -sS https://packages.sury.org/php/apt.gpg | apt-key add - \
     && echo "deb https://packages.sury.org/php/ bullseye main" | tee /etc/apt/sources.list.d/php.list

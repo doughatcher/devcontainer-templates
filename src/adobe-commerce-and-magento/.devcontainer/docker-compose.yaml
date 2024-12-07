@@ -18,6 +18,8 @@ services:
     environment:
       SKIP_SETUP: ${SKIP_SETUP}
       XDEBUG_MODE: ${XDEBUG_MODE}
+      PHP_VERSION: ${PHP_VERSION}
+      COMPOSER_VERSION: ${COMPOSER_VERSION}
   db:
     image: mariadb:10.6
     volumes:
