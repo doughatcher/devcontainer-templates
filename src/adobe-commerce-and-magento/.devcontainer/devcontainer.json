@@ -27,7 +27,12 @@
     "PHP_MODE": "builtin", // fpm, builtin
     "POST_INSTALL_CMD": "",
     "SKIP_SETUP": "false",
-    "SERVER_CMD": ""
+    "SERVER_CMD": "",
+    "MYSQL_IMAGE": "mariadb:10.6",
+    "REDIS_IMAGE": "redis:7.2",
+    "AMPQ_IMAGE": "rabbitmq:latest",
+    "SEARCH_IMAGE": "opensearchproject/opensearch:2",
+    
   },
 
   "hostRequirements": {

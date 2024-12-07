@@ -17,7 +17,7 @@ services:
       ENABLE_IMS: ${ENABLE_IMS}
       COMPOSER_AUTH: ${COMPOSER_AUTH}
   db:
-    image: mariadb:10.6
+    image: ${MYSQL_IMAGE}
     volumes:
       - db-data:/var/lib/mysql
     network_mode: service:magento
@@ -28,22 +28,22 @@ services:
       MYSQL_PASSWORD: magento
  
   redis:
-    image: redis:7.2
+    image: ${REDIS_IMAGE}
     network_mode: service:magento
   ampq:
-    image: rabbitmq:latest
+    image: ${AMPQ_IMAGE}
     network_mode: service:magento
   # mailhog:
   #   image: mailhog/mailhog
   #   network_mode: service:db  
   opensearch:
-    image: opensearchproject/opensearch:2
+    image: ${SEARCH_IMAGE}
     network_mode: service:magento
     environment:
       - discovery.type=single-node
       - plugins.security.disabled=true
       - "OPENSEARCH_INITIAL_ADMIN_PASSWORD=fhgLpkH66PwD"
-      # - "OPENSEARCH_INITIAL_ADMIN_USER=admin"
+      - "OPENSEARCH_INITIAL_ADMIN_USER=admin"
      
 volumes:
   db-data:
