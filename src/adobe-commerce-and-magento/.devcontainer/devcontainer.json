@@ -1,14 +1,18 @@
 {
   "name": "Adobe Commerce",
 
-  "dockerComposeFile": "docker-compose.yaml",
+  "dockerComposeFile":
+    [
+      "docker-compose.yaml",
+      // "docker-compose-nginx.yaml"
+    ],
+
   "service": "magento",
   "workspaceFolder": "/workspaces/${localWorkspaceFolderBasename}",
   "shutdownAction": "stopCompose",
 
-  "forwardPorts": [8443, 9003],
+  "forwardPorts": [8443, 9003, 80],
 
-  "postAttachCommand": "nohup bash -c '.devcontainer/server.sh &'",
   "postCreateCommand": ".devcontainer/commerce.sh",
 
   "mounts": [
@@ -23,7 +27,7 @@
     "PHP_MODE": "builtin", // fpm, builtin
     "POST_INSTALL_CMD": "",
     "SKIP_SETUP": "false",
-
+    "SERVER_CMD": "app/code/Evergreen/Healthcare/bin/watcher.sh",
   },
 
   "hostRequirements": {

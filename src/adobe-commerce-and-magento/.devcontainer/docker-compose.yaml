@@ -1,11 +1,4 @@
-services: 
-  nginx:
-    build: 
-      context: .
-      dockerfile: Dockerfile-nginx
-    network_mode: service:magento
-    volumes_from:
-      - magento
+services:
   magento:
     env_file: .env
     build:
