@@ -14,4 +14,4 @@ Run and manage Adobe Commerce and Magento Open Source projects
 
 ---
 
-_Note: This file was auto-generated from the [devcontainer-template.json](devcontainer-template.json).  Add additional notes to a `NOTES.md`._
+_Note: This file was auto-generated from the [devcontainer-template.json](https://github.com/doughatcher/devcontainer-templates/blob/main/src/commerce/devcontainer-template.json).  Add additional notes to a `NOTES.md`._
