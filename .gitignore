@@ -1,2 +1,7 @@
 **/nohup.out
 .envrc
+src/adobe-commerce-and-magento/**
+!src/adobe-commerce-and-magento/.devcontainer/**
+!src/adobe-commerce-and-magento/devcontainer-template.json
+!src/adobe-commerce-and-magento/NOTES.md
+!src/adobe-commerce-and-magento/README.md
