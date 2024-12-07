@@ -1,0 +1,110 @@
+FROM mcr.microsoft.com/devcontainers/base:bullseye
+# Install php-fpm
+RUN curl -sS https://packages.sury.org/php/apt.gpg | apt-key add - \
+    && echo "deb https://packages.sury.org/php/ bullseye main" | tee /etc/apt/sources.list.d/php.list
+
+RUN apt-get update && apt-get install -y \
+    libzip-dev \
+    git \
+    unzip \
+    wget \
+    libfreetype6-dev \
+    libicu-dev \
+    libjpeg62-turbo-dev \
+    libpng-dev \
+    libxslt1-dev \
+    mariadb-client \
+    sendmail-bin \
+    sendmail \
+    sudo \
+    redis \
+    vim \
+    curl \
+    libzip-dev \
+    unzip \
+    wget \
+    libmagickwand-dev \
+    imagemagick \
+    libjpeg-dev \
+    \
+    php8.3-fpm \
+    php8.3-zip \
+    php8.3-simplexml \
+    php8.3-curl \
+    php8.3-intl \
+    php8.3-soap \
+    php8.3-bcmath \
+    php8.3-gd \
+    php8.3-mysql \
+    php8.3-mbstring \
+    php8.3-swoole \
+    php8.3-xdebug \
+    \
+    libnss3-tools\
+    inotify-tools \
+    \
+    && apt clean
+
+# configure php
+# RUN  docker-php-ext-install -j$(nproc) gd \
+#         && docker-php-ext-install \
+#           dom \
+#           intl \
+#           gd \
+#           pdo_mysql \
+#           xsl \
+#           zip \
+#           soap \
+#           bcmath \
+#           calendar \
+#           sockets \
+#           posix \
+#           pcntl \
+#         && docker-php-ext-configure sockets \
+#         && docker-php-ext-configure gd --with-jpeg --with-freetype \
+#         && docker-php-ext-install gd
+
+# install imagick
+# RUN pecl install imagick
+
+#installs mkcert
+RUN curl -JLO "https://dl.filippo.io/mkcert/latest?for=linux/amd64"
+RUN chmod +x mkcert-v*-linux-amd64
+RUN sudo cp mkcert-v*-linux-amd64 /usr/local/bin/mkcert
+
+# composer dependencies
+RUN curl https://getcomposer.org/download/2.7.0/composer.phar --output /usr/local/bin/composer
+RUN chmod +x /usr/local/bin/composer
+RUN composer --version
+
+# # configuration
+# RUN echo "extension=imagick.so" > /etc/php/8.3/fpm/conf.d/imagick.ini
+RUN echo 'memory_limit = 2G' >> /etc/php/8.3/fpm/php.ini
+RUN echo 'max_input_vars = 10000' >> /etc/php/8.3/fpm/php.ini
+RUN echo 'memory_limit = -1' >> /etc/php/8.3/fpm/conf.d/memory_limit.ini
+
+RUN echo 'memory_limit = 2G' >> /etc/php/8.3/cli/php.ini
+RUN echo 'max_input_vars = 10000' >> /etc/php/8.3/cli/php.ini
+RUN echo 'memory_limit = -1' >> /etc/php/8.3/cli/conf.d/memory_limit.ini
+
+RUN mkdir -p /run/php
+
+COPY conf/php-fpm/fpm-pool.conf /etc/php/8.3/fpm/pool.d/www.conf
+
+RUN ln -s /usr/sbin/php-fpm8.3 /usr/sbin/php-fpm
+
+# install magento-cloud cli
+
+RUN curl -sS https://accounts.magento.cloud/cli/installer | php
+RUN cp ~/.magento-cloud/bin/magento-cloud /usr/local/bin/
+
+RUN curl -o /usr/local/bin/n98 https://files.magerun.net/n98-magerun2.phar && chmod +x /usr/local/bin/n98
+
+
+COPY conf/php/99-xdebug.ini /etc/php/8.3/fpm/conf.d/99-xdebug.ini
+COPY conf/php/99-xdebug.ini /etc/php/8.3/cli/conf.d/99-xdebug.ini
+
+
+RUN mkdir -p ~/.ssh/
+RUN curl -L https://api.github.com/meta | jq -r '.ssh_keys | .[]' | sed -e 's/^/github.com /' >> ~/.ssh/known_hosts
+RUN curl https://bitbucket.org/site/ssh >> ~/.ssh/known_hosts

@@ -1,9 +1,47 @@
 {
-	"name": "Commerce",
+  "name": "Evergreen (Commerce)",
 
-	"dockerComposeFile": "docker-compose.yml",
-	"service": "app",
-	"workspaceFolder": "/workspaces/${localWorkspaceFolderBasename}",
-	"shutdownAction": "stopCompose"
+  "dockerComposeFile": "docker-compose.yaml",
+  "service": "magento",
+  "workspaceFolder": "/workspaces/${localWorkspaceFolderBasename}",
+  "shutdownAction": "stopCompose",
 
+  "forwardPorts": [8443, 9003],
+
+  "postAttachCommand": "nohup bash -c '.devcontainer/server.sh &'",
+  "postCreateCommand": ".devcontainer/commerce.sh",
+
+  "mounts": [
+    "source=${localEnv:HOME}/.ssh,target=/root/.ssh,type=bind,consistency=cached",
+    "source=${localEnv:HOME}/.composer,target=/root/.composer,type=bind,consistency=cached"
+  ],
+
+  "containerEnv": {
+    // "XDEBUG_MODE": "develop"
+    "XDEBUG_MODE": "off",
+    "PHP_MODE": "fpm",
+    "POST_INSTALL_CMD": "", // ".devcontainer/evergreen.sh",
+    "SKIP_SETUP": "false"
+  },
+
+
+  "hostRequirements": {
+    "memory": "16gb",
+    "cpus": 4,
+    "storage": "32gb"
+  },
+
+  "remoteUser": "root",
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "cweijan.vscode-database-client2",
+        "mechatroner.rainbow-csv",
+        "jerrylopez.magento2-extension-pack",
+        "bis2arch.bis2bis-magento-devkit",
+        "GitHub.copilot",
+        "GitHub.copilot-chat"
+      ]
+    }
+  }
 }

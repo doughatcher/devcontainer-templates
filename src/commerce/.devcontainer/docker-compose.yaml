@@ -1,0 +1,52 @@
+services: 
+  nginx:
+    build: 
+      context: .
+      dockerfile: Dockerfile-nginx
+    network_mode: service:magento
+    volumes_from:
+      - magento
+  magento:
+    env_file: .env
+    build:
+      context: ${COMMERCE_CONTEXT_DIR}
+      dockerfile: Dockerfile-magento
+    command: sleep infinity
+    volumes:
+      - ../..:/workspaces:cached
+      - ${COMMERCE_WWW_DIR}:/var/www/html
+    environment:
+      SKIP_SETUP: ${SKIP_SETUP}
+      XDEBUG_MODE: ${XDEBUG_MODE}
+  db:
+    image: mariadb:10.6
+    volumes:
+      - db-data:/var/lib/mysql
+    network_mode: service:magento
+    environment:
+      MYSQL_ROOT_PASSWORD: magento
+      MYSQL_DATABASE: magento
+      MYSQL_USER: magento
+      MYSQL_PASSWORD: magento
+ 
+  redis:
+    image: redis:7.2
+    network_mode: service:magento
+  ampq:
+    image: rabbitmq:latest
+    network_mode: service:magento
+  # mailhog:
+  #   image: mailhog/mailhog
+  #   network_mode: service:db  
+  opensearch:
+    image: opensearchproject/opensearch:2
+    network_mode: service:magento
+    environment:
+      - discovery.type=single-node
+      - plugins.security.disabled=true
+      - "OPENSEARCH_INITIAL_ADMIN_PASSWORD=fhgLpkH66PwD"
+      # - "OPENSEARCH_INITIAL_ADMIN_USER=admin"
+     
+volumes:
+  db-data:
+  magento:
