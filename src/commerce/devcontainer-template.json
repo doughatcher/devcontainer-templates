@@ -1,6 +1,6 @@
 {
     "id": "adobe-commerce-and-magento",
-    "version": "0.0.1",
+    "version": "0.1.1",
     "name": "Adobe Commerce and Magento",
     "description": "Run and manage Adobe Commerce and Magento Open Source projects",
     "documentationURL": "https://github.com/doughatcher/devcontainer-templates/tree/main/src/commerce",
@@ -11,7 +11,7 @@
             "type": "string",
             "description": "The version of PHP to install, should align with Commerce version",
             "default": "8.3",
-            "proposls": ["7.4", "8.1", "8.2", "8.3", "8.4"]
+            "proposals": ["7.4", "8.1", "8.2", "8.3", "8.4"]
         },
         "composerVersion": {
             "type": "string",
