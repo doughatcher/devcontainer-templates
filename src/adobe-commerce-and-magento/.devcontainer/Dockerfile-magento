@@ -27,18 +27,29 @@ RUN apt-get update && apt-get install -y \
     imagemagick \
     libjpeg-dev \
     \
-    php8.3-fpm \
-    php8.3-zip \
-    php8.3-simplexml \
-    php8.3-curl \
-    php8.3-intl \
-    php8.3-soap \
-    php8.3-bcmath \
-    php8.3-gd \
-    php8.3-mysql \
-    php8.3-mbstring \
-    php8.3-swoole \
-    php8.3-xdebug \
+    php${PHP_VERSION}-fpm \
+    php${PHP_VERSION}-zip \
+    php${PHP_VERSION}-simplexml \
+    php${PHP_VERSION}-curl \
+    php${PHP_VERSION}-intl \
+    php${PHP_VERSION}-soap \
+    php${PHP_VERSION}-bcmath \
+    php${PHP_VERSION}-gd \
+    php${PHP_VERSION}-mysql \
+    php${PHP_VERSION}-mbstring \
+    php${PHP_VERSION}-swoole \
+    php${PHP_VERSION}-xdebug \
+    php${PHP_VERSION}-zip \
+    php${PHP_VERSION}-simplexml \
+    php${PHP_VERSION}-curl \
+    php${PHP_VERSION}-intl \
+    php${PHP_VERSION}-soap \
+    php${PHP_VERSION}-bcmath \
+    php${PHP_VERSION}-gd \
+    php${PHP_VERSION}-mysql \
+    php${PHP_VERSION}-mbstring \
+    php${PHP_VERSION}-swoole \
+    php${PHP_VERSION}-xdebug \
     \
     libnss3-tools\
     inotify-tools \
@@ -73,25 +84,25 @@ RUN chmod +x mkcert-v*-linux-amd64
 RUN sudo cp mkcert-v*-linux-amd64 /usr/local/bin/mkcert
 
 # composer dependencies
-RUN curl https://getcomposer.org/download/2.7.0/composer.phar --output /usr/local/bin/composer
+RUN curl https://getcomposer.org/download/${COMPOSER_VERSION}/composer.phar --output /usr/local/bin/composer
 RUN chmod +x /usr/local/bin/composer
 RUN composer --version
 
 # # configuration
-# RUN echo "extension=imagick.so" > /etc/php/8.3/fpm/conf.d/imagick.ini
-RUN echo 'memory_limit = 2G' >> /etc/php/8.3/fpm/php.ini
-RUN echo 'max_input_vars = 10000' >> /etc/php/8.3/fpm/php.ini
-RUN echo 'memory_limit = -1' >> /etc/php/8.3/fpm/conf.d/memory_limit.ini
+# RUN echo "extension=imagick.so" > /etc/php/${PHP_VERSION}/fpm/conf.d/imagick.ini
+RUN echo 'memory_limit = 2G' >> /etc/php/${PHP_VERSION}/fpm/php.ini
+RUN echo 'max_input_vars = 10000' >> /etc/php/${PHP_VERSION}/fpm/php.ini
+RUN echo 'memory_limit = -1' >> /etc/php/${PHP_VERSION}/fpm/conf.d/memory_limit.ini
 
-RUN echo 'memory_limit = 2G' >> /etc/php/8.3/cli/php.ini
-RUN echo 'max_input_vars = 10000' >> /etc/php/8.3/cli/php.ini
-RUN echo 'memory_limit = -1' >> /etc/php/8.3/cli/conf.d/memory_limit.ini
+RUN echo 'memory_limit = 2G' >> /etc/php/${PHP_VERSION}/cli/php.ini
+RUN echo 'max_input_vars = 10000' >> /etc/php/${PHP_VERSION}/cli/php.ini
+RUN echo 'memory_limit = -1' >> /etc/php/${PHP_VERSION}/cli/conf.d/memory_limit.ini
 
 RUN mkdir -p /run/php
 
-COPY conf/php-fpm/fpm-pool.conf /etc/php/8.3/fpm/pool.d/www.conf
+COPY conf/php-fpm/fpm-pool.conf /etc/php/${PHP_VERSION}/fpm/pool.d/www.conf
 
-RUN ln -s /usr/sbin/php-fpm8.3 /usr/sbin/php-fpm
+RUN ln -s /usr/sbin/php-fpm${PHP_VERSION} /usr/sbin/php-fpm
 
 # install magento-cloud cli
 
@@ -101,8 +112,8 @@ RUN cp ~/.magento-cloud/bin/magento-cloud /usr/local/bin/
 RUN curl -o /usr/local/bin/n98 https://files.magerun.net/n98-magerun2.phar && chmod +x /usr/local/bin/n98
 
 
-COPY conf/php/99-xdebug.ini /etc/php/8.3/fpm/conf.d/99-xdebug.ini
-COPY conf/php/99-xdebug.ini /etc/php/8.3/cli/conf.d/99-xdebug.ini
+COPY conf/php/99-xdebug.ini /etc/php/${PHP_VERSION}/fpm/conf.d/99-xdebug.ini
+COPY conf/php/99-xdebug.ini /etc/php/${PHP_VERSION}/cli/conf.d/99-xdebug.ini
 
 
 RUN mkdir -p ~/.ssh/
