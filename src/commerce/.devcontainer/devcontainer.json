@@ -1,5 +1,5 @@
 {
-  "name": "Evergreen (Commerce)",
+  "name": "Adobe Commerce",
 
   "dockerComposeFile": "docker-compose.yaml",
   "service": "magento",
@@ -17,13 +17,14 @@
   ],
 
   "containerEnv": {
-    // "XDEBUG_MODE": "develop"
-    "XDEBUG_MODE": "off",
-    "PHP_MODE": "fpm",
-    "POST_INSTALL_CMD": "", // ".devcontainer/evergreen.sh",
-    "SKIP_SETUP": "false"
-  },
+    "PHP_VERSION": "${templateOption:phpVersion}",
+    "COMPOSER_VERSION": "${templateOption:composerVersion}",
+    "XDEBUG_MODE": "off", // debug, profile, trace
+    "PHP_MODE": "fpm", // builtin
+    "POST_INSTALL_CMD": "",
+    "SKIP_SETUP": "false",
 
+  },
 
   "hostRequirements": {
     "memory": "16gb",

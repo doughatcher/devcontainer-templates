@@ -2,40 +2,22 @@
     "id": "adobe-commerce-and-magento",
     "version": "0.0.1",
     "name": "Adobe Commerce and Magento",
-    "description": "Run and Mnage Adobe Commerce and Magento Open Source Projects",
-    "documentationURL": "https://github.com/devcontainers/templates/tree/main/src/docker-in-docker",
-    "publisher": "Dev Container Spec Maintainers",
+    "description": "Run and manage Adobe Commerce and Magento Open Source projects",
+    "documentationURL": "https://github.com/doughatcher/devcontainer-templates/tree/main/src/commerce",
+    "publisher": "doug@hatcher.ltd",
     "licenseURL": "https://github.com/devcontainers/templates/blob/main/LICENSE",
     "options": {
-        "installZsh": {
-            "type": "boolean",
-            "description": "Install ZSH!?",
-            "default": "true"
-        },
-        "upgradePackages": {
-            "type": "boolean",
-            "description": "Upgrade OS packages?",
-            "default": "false"
-        },
-        "dockerVersion": {
+        "phpVersion": {
             "type": "string",
-            "proposals": [
-                "latest",
-                "none",
-                "20.10"
-            ],
-            "default": "latest",
-            "description": "Select or enter a Docker/Moby CLI version. (Availability can vary by OS version.)"
+            "description": "The version of PHP to install, should align with Commerce version",
+            "default": "8.3",
+            "proposls": ["7.4", "8.1", "8.2", "8.3", "8.4"]
         },
-        "moby": {
-            "type": "boolean",
-            "default": "true",
-            "description": "Install OSS Moby build instead of Docker CE"
-        },
-        "enableNonRootDocker": {
-            "type": "boolean",
-            "description": "Enable non-root user to access Docker in container?",
-            "default": "true"
+        "composerVersion": {
+            "type": "string",
+            "description": "The version of Composer to install",
+            "default": "2.7.0",
+            "proposals": ["2.6.0", "2.7.0", "2.8.0"]
         }
     },
     "platforms": ["Any"],
