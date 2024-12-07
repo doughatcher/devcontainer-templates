@@ -10,7 +10,19 @@ Run and manage Adobe Commerce and Magento Open Source projects
 | phpVersion | The version of PHP to install, should align with Commerce version | string | 8.3 |
 | composerVersion | The version of Composer to install | string | 2.7.0 |
 
+# Commerce Devcontainer
 
+This devcontainer runs Adobe Commerce and Magento Open Source for development and testing purposes.
+
+## Requirements
+
+### auth.json or $COMPOSER_AUTH
+
+Commerce requires access to the repos.magento.com repository, so a valid composer auth must be provided.
+
+## Codespaces
+
+This template will run in a Github Codespace, but is still being developed and has some limitations at this point.
 
 ---
 
