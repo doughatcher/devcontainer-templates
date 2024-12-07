@@ -26,5 +26,5 @@ jobs:
           imageName: ghcr.io/doughatcher/devcontainer-templates
           runCmd: |
             make build
-          env: 
-            COMPOSER_AUTH: ${{ secrets.COMPOSER_AUTH }}
+        env: 
+          COMPOSER_AUTH: ${{ secrets.COMPOSER_AUTH }}
