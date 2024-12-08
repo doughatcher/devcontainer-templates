@@ -13,7 +13,3 @@ generate-docs: ## generate docs for each devcontainer
 
 publish: ## publish all devcontainers
 	devcontainer templates publish -r ghcr.io -n doughatcher/devcontainer-templates ./src
-
-create-auth-json: ## creates auth.json from COMPOSER_AUTH for Github Action usage
-	echo $$COMPOSER_AUTH > src/adobe-commerce-and-magento/auth.json
-	cat src/adobe-commerce-and-magento/auth.json
