@@ -7,6 +7,8 @@ on: # rebuild any PRs and main branch changes
 
 jobs:
   build:
+    permissions:
+      packages: write
     runs-on: ubuntu-latest
     steps:
 
@@ -18,12 +20,11 @@ jobs:
         with:
           registry: ghcr.io
           username: ${{ github.repository_owner }}
-          password: ${{ secrets.GH_TOKEN }}
+          password: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Build and run Dev Container task
         uses: devcontainers/ci@v0.3
-        permissions:
-          packages: write
+
         with:
           imageName: ghcr.io/doughatcher/devcontainer-templates
           cacheFrom: ghcr.io/doughatcher/devcontainer-templates
