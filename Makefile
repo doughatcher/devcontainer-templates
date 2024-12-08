@@ -16,4 +16,4 @@ publish: ## publish all devcontainers
 
 create-auth-json: ## creates auth.json from COMPOSER_AUTH for Github Action usage
 	echo $$COMPOSER_AUTH > src/adobe-commerce-and-magento/auth.json
-	echo src/adobe-commerce-and-magento/auth.json
+	cat src/adobe-commerce-and-magento/auth.json
