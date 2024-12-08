@@ -28,7 +28,6 @@ jobs:
         with:
           imageName: ghcr.io/doughatcher/devcontainer-templates
           cacheFrom: ghcr.io/doughatcher/devcontainer-templates
-          publish: true
 
           runCmd: |
             export COMPOSER_AUTH=${{ secrets.COMPOSER_AUTH }}
