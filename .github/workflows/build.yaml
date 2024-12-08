@@ -26,7 +26,7 @@ jobs:
           imageName: ghcr.io/doughatcher/devcontainer-templates
           runCmd: |
             export COMPOSER_AUTH=${{ secrets.COMPOSER_AUTH }}
-            make create-auth-json
+            echo $COMPOSER_AUTH
             make build
         env: 
           COMPOSER_AUTH: ${{ secrets.COMPOSER_AUTH }}
