@@ -1,5 +1,5 @@
 name: 'build' 
-on: 
+on: # rebuild any PRs and main branch changes
   pull_request:
   push:
     branches:
@@ -22,14 +22,17 @@ jobs:
           username: ${{ github.repository_owner }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Build and run Dev Container task 
+      - name: Build and run Dev Container task
         uses: devcontainers/ci@v0.3
+
         with:
           imageName: ghcr.io/doughatcher/devcontainer-templates
-
+          cacheFrom: ghcr.io/doughatcher/devcontainer-templates
+          publish-templates: "true"
+          base-path-to-templates: "./src"
           runCmd: |
             export COMPOSER_AUTH=${{ secrets.COMPOSER_AUTH }}
-            make ci
+            make build
         env: 
           COMPOSER_AUTH: ${{ secrets.COMPOSER_AUTH }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
