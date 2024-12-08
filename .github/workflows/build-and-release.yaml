@@ -22,8 +22,8 @@ jobs:
           username: ${{ github.repository_owner }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Build and run Dev Container task
-        uses: devcontainers/ci@v0.3
+      - name: Build and run Dev Container task 
+        uses: devcontainers/ci@v0.3 
         with:
           imageName: ghcr.io/doughatcher/devcontainer-templates
 
