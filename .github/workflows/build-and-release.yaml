@@ -1,5 +1,5 @@
 name: 'build' 
-on: # rebuild any PRs and main branch changes
+on: 
   pull_request:
   push:
     branches:
@@ -28,11 +28,9 @@ jobs:
         with:
           imageName: ghcr.io/doughatcher/devcontainer-templates
           cacheFrom: ghcr.io/doughatcher/devcontainer-templates
-          publish-templates: "true"
-          base-path-to-templates: "./src"
           runCmd: |
             export COMPOSER_AUTH=${{ secrets.COMPOSER_AUTH }}
-            make build
+            make ci
         env: 
           COMPOSER_AUTH: ${{ secrets.COMPOSER_AUTH }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

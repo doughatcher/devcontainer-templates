@@ -13,3 +13,5 @@ generate-docs: ## generate docs for each devcontainer
 
 publish: ## publish all devcontainers
 	devcontainer templates publish -r ghcr.io -n doughatcher/devcontainer-templates ./src
+
+ci: build publish ## Build and publish all devcontainers
