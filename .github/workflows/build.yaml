@@ -25,6 +25,8 @@ jobs:
         with:
           imageName: ghcr.io/doughatcher/devcontainer-templates
           runCmd: |
+            echo $COMPOSER_AUTH
+            exit 1
             make create-auth-json
             make build
         env: 
