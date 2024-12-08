@@ -31,9 +31,8 @@ jobs:
 
           runCmd: |
             export COMPOSER_AUTH=${{ secrets.COMPOSER_AUTH }}
-            export GITHUB_TOKEN=${{ secrets.GITHUB_TOKEN }}
             
-            make ci
+            make build
         env: 
           COMPOSER_AUTH: ${{ secrets.COMPOSER_AUTH }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
