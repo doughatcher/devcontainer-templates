@@ -1,16 +1,3 @@
-
-# Magento Open Source (magento)
-
-Magento 2 (Open Source / Community Edition) development environment with PHP-FPM, MariaDB, Redis, RabbitMQ, OpenSearch, MailHog, and an optional Nginx sidecar. Auto-installs Magento on first start.
-
-## Options
-
-| Options Id | Description | Type | Default Value |
-|-----|-----|-----|-----|
-| phpVersion | PHP version. Must align with the Magento version you intend to install. | string | 8.3 |
-| composerVersion | Composer version to install. Use 'latest-stable' for the most recent 2.x. | string | latest-stable |
-| commerceEdition | Composer project to bootstrap when no composer.json is present in the workspace. | string | magento/project-community-edition |
-
 # Notes
 
 ## Architecture
@@ -72,8 +59,3 @@ The template defaults to **PHP built-in** on port 8080 because it's a single pro
 ## Maintenance
 
 This template is sourced from [`doughatcher/magento`](https://github.com/doughatcher/magento)'s `.devcontainer/` directory. When updating, prefer modifying the magento repo first (where the devcontainer is exercised continuously), then sync the relevant files into `src/magento/.devcontainer/` here and run `make build` to verify.
-
-
----
-
-_Note: This file was auto-generated from the [devcontainer-template.json](devcontainer-template.json).  Add additional notes to a `NOTES.md`._

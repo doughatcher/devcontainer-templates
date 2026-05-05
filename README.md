@@ -1,46 +1,54 @@
-# Devcontainer Templates
+# Doug Hatcher's Dev Container Templates
 
-A collection of [Dev Container Templates](https://containers.dev/implementors/templates/) for Magento and adjacent projects.
+Landing page for the [Dev Container Templates](https://containers.dev/implementors/templates/) collection at `ghcr.io/doughatcher/devcontainer-templates`. Each template lives in its own working repository where it's actively used, and publishes itself to this shared OCI namespace on tagged releases.
 
 ## Available templates
 
-| ID | Name | Description |
-|----|------|-------------|
-| [`magento`](./src/magento/) | Magento Open Source | Magento 2 (Community Edition) with PHP-FPM, MariaDB, Redis, RabbitMQ, OpenSearch, MailHog, optional Nginx sidecar. Auto-installs on first start. |
+| Template | Working Repo | OCI Reference | Status |
+|----------|--------------|---------------|--------|
+| **`magento`** — Magento Open Source 2.x | [doughatcher/magento](https://github.com/doughatcher/magento) | `ghcr.io/doughatcher/devcontainer-templates/magento` | ✅ Published |
+| **`aem-app-builder`** — Adobe AEM with App Builder | _planned_ | _tbd_ | 🔜 Planned |
+| **`aem-eds`** — Adobe AEM Edge Delivery Services | _planned_ | _tbd_ | 🔜 Planned |
 
-## Usage
-
-Apply a template into a new project directory:
+## Using a template
 
 ```bash
 devcontainer templates apply \
   --template-id ghcr.io/doughatcher/devcontainer-templates/magento \
-  --workspace-folder ./my-magento-project
+  --workspace-folder ./my-project
 ```
 
-Or use the VS Code command palette: **Dev Containers: Add Dev Container Configuration Files…** → **From a predefined Dev Container Template…** and pick the template from the registry.
+Or in VS Code: **Dev Containers: Add Dev Container Configuration Files…** → **From a predefined Dev Container Template…** and pick from the registry.
 
-## Local development
+## Architecture: working repos own their templates
 
-```bash
-make help            # list targets
-make build           # build the magento template via `devcontainer up`
-make publish         # publish to GHCR (requires GITHUB_TOKEN with write:packages)
+Each template is published from its own working repository — the same repo where the dev container is exercised continuously. There's no separate "template source" tree to keep in sync. The publishing flow:
+
+1. The working repo (e.g., `doughatcher/magento`) keeps its `.devcontainer/` runnable with hardcoded values (`php8.3`, etc.).
+2. A `.template/build.sh` script in that repo copies the live tree into a scratch dir and lifts hardcoded values into `${templateOption:*}` markers.
+3. A `.github/workflows/publish-template.yml` workflow, triggered on `template-v*` tags, runs the build script and publishes via `devcontainer templates publish` to `ghcr.io/doughatcher/devcontainer-templates/<id>`.
+
+What each working repo's `.template/` directory contains:
+
+```
+.template/
+├── devcontainer-template.json   # template manifest (id, version, options)
+├── NOTES.md                     # extended docs (rendered into README at build time)
+└── build.sh                     # working-tree → publishable artifact
 ```
 
-The default GHCR namespace is `doughatcher/devcontainer-templates`. Override with `make publish NAMESPACE=youruser/yourrepo`.
+This repository (`doughatcher/devcontainer-templates`) is just a landing page. It owns the OCI namespace's collection metadata and lists the available templates. It does not contain template source.
 
-## Maintaining template parity with the Magento working repo
+## Contributing a new template
 
-The `magento` template is sourced from [`doughatcher/magento`](https://github.com/doughatcher/magento)'s `.devcontainer/` directory, which is a live, exercised Magento installation. When making changes:
+Have a project that should be a template here? Open an issue. The pattern is:
 
-1. Prototype in `doughatcher/magento` — that's where the devcontainer is run continuously and bugs surface fast.
-2. Once stable, sync the changed files into `src/magento/.devcontainer/` here.
-3. For any file that contains version strings (`Dockerfile-magento`, `.env`, `commerce.sh`), preserve the `${templateOption:phpVersion}` / `${templateOption:composerVersion}` / `${templateOption:commerceEdition}` substitutions.
-4. Run `make build` to smoke-test, then bump `version` in `src/magento/devcontainer-template.json` before pushing to main.
+1. Your working repo gets a `.template/` directory + a `publish-template.yml` workflow.
+2. Workflow publishes to `ghcr.io/doughatcher/devcontainer-templates/<your-id>`.
+3. Add a row to the table above so `devcontainer templates apply` users can find it.
 
 ## References
 
 - [Dev Container spec — Templates](https://containers.dev/implementors/templates/)
 - [`devcontainers/templates`](https://github.com/devcontainers/templates) — the official template index
-- [Submittal PR (legacy)](https://github.com/devcontainers/devcontainers.github.io/pull/500)
+- This collection's [official-index registration PR](https://github.com/devcontainers/devcontainers.github.io/pull/696)
