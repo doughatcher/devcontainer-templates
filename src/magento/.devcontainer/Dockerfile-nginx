@@ -1,8 +1,9 @@
 FROM nginx:latest
 
-RUN curl -JLO "https://dl.filippo.io/mkcert/latest?for=linux/amd64"
-RUN chmod +x mkcert-v*-linux-amd64
-RUN cp mkcert-v*-linux-amd64 /usr/local/bin/mkcert
+RUN ARCH=$(uname -m | sed 's/x86_64/amd64/; s/aarch64/arm64/') && \
+    curl -JLO "https://dl.filippo.io/mkcert/latest?for=linux/$ARCH"
+RUN chmod +x mkcert-v*-linux-*
+RUN cp mkcert-v*-linux-* /usr/local/bin/mkcert
 
 RUN mkcert -install && mkcert -cert-file /etc/ssl/certs/localhost.crt -key-file /etc/ssl/private/localhost.key localhost
 
